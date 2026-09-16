@@ -1,33 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Books in a Library</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-    <h1>Books in a Library</h1>
-    <p>Prepared by: <strong>{{ $fullName }}</strong></p>
+@extends('layouts.app')
 
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year Published</th>
-            <th>Action</th>
-        </tr>
-        @foreach ($books as $id => $book)
-        <tr>
-            <td>{{ $book['title'] }}</td>
-            <td>{{ $book['author'] }}</td>
-            <td>{{ $book['year'] }}</td>
-            <td><a href="{{ url('/books/' . $id) }}">View Details</a></td>
-        </tr>
-        @endforeach
+@section('content')
+<div class="container">
+    <h2 class="text-center mb-3">My Book List</h2>
+    <p class="text-center text-muted mb-5">Prepared by: Jose O. Obogne Jr.</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Pamagat</th>
+                <th>May-akda</th>
+                <th>Taon</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($books as $index => $book)
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>
+                    @if ($book['author'] == 'Jose Rizal')
+                        <strong class="text-danger">{{ $book['title'] }} ⭐</strong>
+                    @else
+                        {{ $book['title'] }}
+                    @endif
+                </td>
+                <td>{{ $book['author'] }}</td>
+                <td>{{ $book['year'] }}</td>
+            </tr>
+            @endforeach
+        </tbody>
     </table>
-</body>
-</html>
+</div>
+@endsection

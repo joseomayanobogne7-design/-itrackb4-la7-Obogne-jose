@@ -4,62 +4,62 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BookController extends Controller
+class BooksController extends Controller
 {
-    private function getBooksData()
-    {
-        return [
-            1 => ['id' => 1, 'title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887, 'category' => 'Classic'],
-            2 => ['id' => 2, 'title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891, 'category' => 'Classic'],
-            3 => ['id' => 3, 'title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734, 'category' => 'Folklore'],
-            4 => ['id' => 4, 'title' => 'Florante at Laura', 'author' => 'Francisco Balagtas', 'year' => 1838, 'category' => 'Poetry'],
-            5 => ['id' => 5, 'title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983, 'category' => 'Modern'],
-            6 => ['id' => 6, 'title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988, 'category' => 'Modern'],
-        ];
-    }
-
     public function index()
     {
-        $books = $this->getBooksData();
-        $fullName = 'Jose O. Obogne Jr.';
+        $books = [
+            ['title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887],
+            ['title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891],
+            ['title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734],
+            ['title' => 'Florante at Laura', 'author' => 'Francisco Balagtas', 'year' => 1838],
+            ['title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983],
+            ['title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988],
+        ];
 
-        return view('books.index', compact('books', 'fullName'));
-    }
-
-    public function featured()
-    {
-        $books = $this->getBooksData();
-        $featured = $books[1];
-        $fullName = 'Jose O. Obogne Jr.';
-        return view('books.featured', compact('featured', 'fullName'));
-    }
-
-    public function filter($category = null)
-    {
-        $all = $this->getBooksData();
-        $filtered = [];
-        if ($category) {
-            foreach ($all as $id => $book) {
-                if ($book['category'] == ucfirst(strtolower($category))) {
-                    $filtered[$id] = $book;
-                }
-            }
-        } else {
-            $filtered = $all;
-        }
-        $fullName = 'Jose O. Obogne Jr.';
-        $filterValue = ucfirst(strtolower($category));
-        return view('books.filter', compact('filtered', 'fullName', 'filterValue'));
+        return view('books.index', compact('books'));
     }
 
     public function show($id)
     {
-        $books = $this->getBooksData();
-        if (!isset($books[$id])) {
-            abort(404, 'Book not found.');
+        $allBooks = [
+            ['id' => 1, 'title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887],
+            ['id' => 2, 'title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891],
+            ['id' => 3, 'title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734],
+            ['id' => 4, 'title' => 'Florante at Laura', 'author' => 'Francisco Balagtas', 'year' => 1838],
+            ['id' => 5, 'title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983],
+            ['id' => 6, 'title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988],
+        ];
+
+        $book = collect($allBooks)->firstWhere('id', $id);
+        return view('books.show', compact('book'));
+    }
+
+    public function filter(Request $request)
+    {
+        $allBooks = [
+            ['title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887],
+            ['title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891],
+            ['title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734],
+            ['title' => 'Florante at Laura', 'author' => 'Francisco Balagtas', 'year' => 1838],
+            ['title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983],
+            ['title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988],
+        ];
+
+        $results = $allBooks;
+
+        if ($request->author) {
+            $results = array_filter($results, function($b) use ($request) {
+                return stripos($b['author'], $request->author) !== false;
+            });
         }
-        $book = $books[$id];
-        $fullName = 'Jose O. Obogne Jr.';
-        return view('books.show', compact('book', 'fullName'));
+
+        if ($request->year) {
+            $results = array_filter($results, function($b) use ($request) {
+                return $b['year'] == $request->year;
+            });
+        }
+
+        return view('books.filter', compact('results'));
     }
 }

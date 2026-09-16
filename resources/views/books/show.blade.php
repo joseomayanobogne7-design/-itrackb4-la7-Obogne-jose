@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $book['title'] }}</title>
-    <style>
-        .detail { margin: 10px 0; font-size: 16px; }
-        .label { font-weight: bold; display: inline-block; width: 120px; }
-        a { color: #0066cc; text-decoration: none; margin-top: 20px; display: inline-block; }
-    </style>
-</head>
-<body>
-    <h1>{{ $book['title'] }}</h1>
+@extends('layouts.app')
 
-    <div class="detail">
-        <span class="label">Title:</span> {{ $book['title'] }}
-    </div>
-    <div class="detail">
-        <span class="label">Author:</span> {{ $book['author'] }}
-    </div>
-    <div class="detail">
-        <span class="label">Year:</span> {{ $book['year'] }}
-    </div>
+@section('content')
+<div class="container">
+    <h2 class="mb-4">📖 Book Details</h2>
 
-    <p style="margin-top: 30px;">Prepared by: <strong>{{ $fullName }}</strong></p>
+    @if ($book)
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">{{ $book['title'] }}</h3>
+            <h5 class="text-muted mb-3">by {{ $book['author'] }}</h5>
+            <p><strong>Published Year:</strong> {{ $book['year'] }}</p>
+        </div>
+    </div>
+    @else
+    <div class="alert alert-danger">Libro hindi natagpuan.</div>
+    @endif
 
-    <a href="{{ url('/books') }}">← Back to Book List</a>
-</body>
-</html>
+    <div class="mt-4">
+        <a href="{{ route('books.index') }}" class="btn btn-primary">← Back to Book List</a>
+    </div>
+</div>
+@endsection

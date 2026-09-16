@@ -2,34 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Pahina Listahan
 Route::get('/', function () {
-    return view('subjects.index');
-});
+    return view('home');
+})->name('home');
 
-Route::get('/subjects', function () {
-    return view('subjects.index');
-});
-
-// DETALYE NG SUBJECT — DAPAT NASA ITAAS O BAGO ANG IBANG ROUTE!
-Route::get('/subjects/{id}', function ($id) {
-    $subjects = [
-        1 => ['code'=>'ITRACKB4', 'title'=>'Web Systems and Technologies', 'units'=>3, 'course'=>'BSIT'],
-        2 => ['code'=>'ITEC101', 'title'=>'Introduction to Computing', 'units'=>3, 'course'=>'BSIT'],
-        3 => ['code'=>'ITI202', 'title'=>'Database Management Systems', 'units'=>3, 'course'=>'BSIT'],
-        4 => ['code'=>'ITPRO3', 'title'=>'Computer Programming', 'units'=>3, 'course'=>'BSIT'],
-        5 => ['code'=>'ITNET01', 'title'=>'Networking Fundamentals', 'units'=>3, 'course'=>'BSIT'],
-        6 => ['code'=>'GE101', 'title'=>'Understanding the Self', 'units'=>3, 'course'=>'GED'],
-        7 => ['code'=>'ITEL03', 'title'=>'Platform Technologies', 'units'=>3, 'course'=>'BSIT'],
-    ];
-
-    if (!isset($subjects[$id])) {
-        abort(404);
-    }
-
-    return view('subjects.show', ['subj' => $subjects[$id], 'id' => $id]);
-});
-
-Route::get('/second-page', function () {
-    return view('second-page');
-});
+Route::get('/books', 'App\Http\Controllers\BooksController@index')->name('books.index');
+Route::get('/books/featured', 'App\Http\Controllers\BooksController@featured')->name('books.featured');
+Route::get('/books/filter', 'App\Http\Controllers\BooksController@filter')->name('books.filter');
+Route::get('/books/{book}', 'App\Http\Controllers\BooksController@show')->name('books.show');
