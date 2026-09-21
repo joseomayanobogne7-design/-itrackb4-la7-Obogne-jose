@@ -1,13 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/books') }}">Book Portal</a>
+        <a class="navbar-brand" href="/">LibSys</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('books.featured') }}">Featured Books</a>
+                    <a class="nav-link" href="{{ route('teachers.index') }}">Teachers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('books.filter') }}">Filter Books</a>
+                    <a class="nav-link" href="{{ route('teachers.featured') }}">Featured Teacher</a>
                 </li>
             </ul>
         </div>
