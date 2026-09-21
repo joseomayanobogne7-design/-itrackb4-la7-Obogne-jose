@@ -39,7 +39,8 @@ class SubjectController extends Controller
     public function show($id)
     {
         $subjects = $this->getSubjectsData();
-        $id = (int)$id; // ✅ Inayos: gawing integer ang $id
+        $id = (int)$id;
+
         if (!isset($subjects[$id - 1])) {
             abort(404);
         }
