@@ -4,10 +4,20 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('teachers.index') }}">Teachers</a>
+                    <a class="nav-link {{ request()->is('teachers*') ? 'active' : '' }}" 
+                       href="{{ route('teachers.index') }}">Teachers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('teachers.featured') }}">Featured Teacher</a>
+                    <a class="nav-link {{ request()->is('featured-teachers') ? 'active' : '' }}" 
+                       href="{{ route('teachers.featured') }}">Featured Teacher</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('subjects*') ? 'active' : '' }}" 
+                       href="{{ route('subjects.index') }}">Subjects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('featured-subjects') ? 'active' : '' }}" 
+                       href="{{ route('subjects.featured') }}">Featured Subjects</a>
                 </li>
             </ul>
         </div>

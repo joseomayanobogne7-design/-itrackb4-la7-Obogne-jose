@@ -19,9 +19,23 @@ class SubjectController extends Controller
         ];
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $subjects = $this->getSubjectsData();
+        
+        if ($request->query('course')) {
+            $subjects = array_filter($subjects, function($subj) use ($request) {
+                return $subj['course'] === $request->query('course');
+            });
+        }
+        
+        if ($request->query('search')) {
+            $searchTerm = strtolower($request->query('search'));
+            $subjects = array_filter($subjects, function($subj) use ($searchTerm) {
+                return str_contains(strtolower($subj['code']), $searchTerm) ||
+                       str_contains(strtolower($subj['title']), $searchTerm);
+            });
+        }
+
         $fullName = 'Nadine C. Rojas';
         return view('subjects.index', compact('subjects', 'fullName'));
     }

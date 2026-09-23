@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 class BooksController extends Controller
 {
-    public function index()
+    private function getAllBooks()
     {
-        $books = [
+        return [
             ['id' => 1, 'title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887],
             ['id' => 2, 'title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891],
             ['id' => 3, 'title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734],
@@ -16,8 +16,48 @@ class BooksController extends Controller
             ['id' => 5, 'title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983],
             ['id' => 6, 'title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988],
         ];
+    }
 
+    public function index()
+    {
+        $books = $this->getAllBooks();
         return view('books.index', compact('books'));
+    }
+
+    public function create()
+    {
+        //
+    }
+
+    public function store(Request $request)
+    {
+        //
+    }
+
+    public function show($id)
+    {
+        $book = collect($this->getAllBooks())->firstWhere('id', $id);
+
+        if (!$book) {
+            abort(404);
+        }
+
+        return view('books.show', compact('book'));
+    }
+
+    public function edit($id)
+    {
+        //
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    public function destroy($id)
+    {
+        //
     }
 
     public function featured()
@@ -33,40 +73,7 @@ class BooksController extends Controller
 
     public function filter(Request $request)
     {
-        $allBooks = [
-            ['id' => 1, 'title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887],
-            ['id' => 2, 'title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891],
-            ['id' => 3, 'title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734],
-            ['id' => 4, 'title' => 'Florante at Laura', 'author' => 'Francisco Balagtas', 'year' => 1838],
-            ['id' => 5, 'title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983],
-            ['id' => 6, 'title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988],
-        ];
-
-        $results = $allBooks;
-
-        if ($request->author) {
-            $results = array_filter($results, fn($b) => stripos($b['author'], $request->author) !== false);
-        }
-
-        if ($request->year) {
-            $results = array_filter($results, fn($b) => $b['year'] == $request->year);
-        }
-
-        return view('books.filter', compact('results'));
-    }
-
-    public function show($id)
-    {
-        $allBooks = [
-            ['id' => 1, 'title' => 'Noli Me Tangere', 'author' => 'Jose Rizal', 'year' => 1887],
-            ['id' => 2, 'title' => 'El Filibusterismo', 'author' => 'Jose Rizal', 'year' => 1891],
-            ['id' => 3, 'title' => 'Ibong Adarna', 'author' => 'Jose de la Cruz', 'year' => 1734],
-            ['id' => 4, 'title' => 'Florante at Laura', 'author' => 'Francisco Balagtas', 'year' => 1838],
-            ['id' => 5, 'title' => 'Dekada \'70', 'author' => 'Lualhati Bautista', 'year' => 1983],
-            ['id' => 6, 'title' => 'Bata, Bata... Paano Ka Ginawa?', 'author' => 'Lualhati Bautista', 'year' => 1988],
-        ];
-
-        $book = collect($allBooks)->firstWhere('id', $id);
-        return view('books.show', compact('book'));
+        $allBooks = $this->getAllBooks();
+        return view('books.filter', compact('allBooks'));
     }
 }

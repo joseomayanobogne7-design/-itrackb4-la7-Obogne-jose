@@ -14,7 +14,6 @@ class FilmController extends Controller
             6 => ['id' => 6, 'title' => 'Four Sisters and a Wedding', 'genre' => 'Comedy / Drama', 'rating' => '8.0/10', 'year' => 2013],
             7 => ['id' => 7, 'title' => 'Everything Everywhere All at Once', 'genre' => 'Sci-Fi / Drama', 'rating' => '9.0/10', 'year' => 2022],
             8 => ['id' => 8, 'title' => 'Crazy Rich Asians', 'genre' => 'Romance / Comedy', 'rating' => '8.7/10', 'year' => 2018],
-            // dagdag na pelikula kung kailangan
         ];
     }
 
@@ -27,14 +26,14 @@ class FilmController extends Controller
     public function show($id)
     {
         $movies = $this->getAllMovies();
-        abort_if(!isset($movies[$id]), 404); // mas malinis na pagsusuri
+        abort_if(!isset($movies[$id]), 404); 
         return view('movies.show', ['movie' => $movies[$id]]);
     }
 
     public function featured()
     {
         $movies = $this->getAllMovies();
-        // ✅ Kunin ang UNANG pelikula gamit ang array_values + index 0
+       
         $moviesList = array_values($movies);
         return view('movies.show', ['movie' => $moviesList[0]]);
     }
@@ -43,14 +42,12 @@ class FilmController extends Controller
     {
         $movies = $this->getAllMovies();
 
-        // ✅ Kung walang genre → ibalik LAHAT
         if ($genre === null || trim($genre) === '') {
             return view('movies.filter', ['movies' => $movies, 'genre' => '']);
         }
 
         $filtered = [];
         foreach ($movies as $movie) {
-            // ✅ stripos = gumana sa PHP 7 & 8, hindi sensitibo sa malaki/maliit na titik
             if (stripos($movie['genre'], $genre) !== false) {
                 $filtered[] = $movie;
             }
