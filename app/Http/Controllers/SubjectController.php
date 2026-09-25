@@ -21,7 +21,9 @@ class SubjectController extends Controller
 
     public function index(Request $request)
     {
-        
+
+        $subjects = $this->getSubjectsData();
+
         if ($request->query('course')) {
             $subjects = array_filter($subjects, function($subj) use ($request) {
                 return $subj['course'] === $request->query('course');
@@ -29,7 +31,7 @@ class SubjectController extends Controller
         }
         
         if ($request->query('search')) {
-            $searchTerm = strtolower($request->query('search'));
+            $searchTerm = strtolower(trim($request->query('search')));
             $subjects = array_filter($subjects, function($subj) use ($searchTerm) {
                 return str_contains(strtolower($subj['code']), $searchTerm) ||
                        str_contains(strtolower($subj['title']), $searchTerm);
@@ -42,12 +44,12 @@ class SubjectController extends Controller
 
     public function create()
     {
-        //
+        
     }
 
     public function store()
     {
-        //
+        
     }
 
     public function show($id)
@@ -65,17 +67,17 @@ class SubjectController extends Controller
 
     public function edit($id)
     {
-        //
+    
     }
 
     public function update($id)
     {
-        //
+        
     }
 
     public function destroy()
     {
-        //
+    
     }
 
     public function featured()

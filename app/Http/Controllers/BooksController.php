@@ -18,10 +18,30 @@ class BooksController extends Controller
         ];
     }
 
-    public function index()
+    // ✅ Updated: Accept Request + TWO filters (A1, A2, A3, A4)
+    public function index(Request $request)
     {
+        // Read query strings — sensible defaults = null
+        $author = $request->query('author');
+        $year = $request->query('year');
+
+        // Start with ALL books
         $books = $this->getAllBooks();
-        return view('books.index', compact('books'));
+
+        // Apply author filter if present
+        if ($author) {
+            $books = array_filter($books, fn($b) => $b['author'] === $author);
+        }
+
+        // Apply year filter if present
+        if ($year) {
+            $books = array_filter($books, fn($b) => $b['year'] == $year);
+        }
+
+        // Reset array keys
+        $books = array_values($books);
+
+        return view('books.index', compact('books', 'author', 'year'));
     }
 
     public function create()
@@ -71,6 +91,7 @@ class BooksController extends Controller
         return view('books.featured', compact('featured'));
     }
 
+    // ❌ OLD filter method — keep it for now but we won't use it
     public function filter(Request $request)
     {
         $allBooks = $this->getAllBooks();

@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2 class="text-center mb-4">⭐ Featured Books</h2>
-    <p class="text-center text-muted mb-5">Mga paboritong akda ng ating mga pambansang manunulat</p>
+    <h2 class="mt-4 mb-3">Featured Books</h2>
+    <p class="text-muted">Prepared by: Jose O. Obogne Jr.</p>
 
-    <div class="row">
-        @foreach ($featured as $book)
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $book['title'] }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ $book['author'] }}</h6>
-                    <p class="card-text"><strong>Taon:</strong> {{ $book['year'] }}</p>
-                    <a href="{{ url('/books/'.$book['id']) }}" class="btn btn-primary btn-sm">Tingnan Detalye</a>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-
-    <div class="text-center mt-4">
-        <a href="{{ route('books.index') }}" class="btn btn-secondary">← Balik sa Lahat ng Libro</a>
-    </div>
-</div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Pamagat</th>
+                <th>May-akda</th>
+                <th>Taon</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($featured as $book)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $book['title'] }}</td>
+                <td>{{ $book['author'] }}</td>
+                <td>{{ $book['year'] }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 @endsection

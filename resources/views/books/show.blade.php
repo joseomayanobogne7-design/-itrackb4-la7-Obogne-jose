@@ -1,23 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">📖 Book Details</h2>
+    <h2 class="mt-4 mb-3">Book Details</h2>
+    
+    <dl class="row">
+        <dt class="col-sm-3">Pamagat</dt>
+        <dd class="col-sm-9">{{ $book['title'] }}</dd>
 
-    @if ($book)
-    <div class="card">
-        <div class="card-body">
-            <h3 class="card-title">{{ $book['title'] }}</h3>
-            <h5 class="text-muted mb-3">by {{ $book['author'] }}</h5>
-            <p><strong>Published Year:</strong> {{ $book['year'] }}</p>
-        </div>
-    </div>
-    @else
-    <div class="alert alert-danger">Libro hindi natagpuan.</div>
-    @endif
+        <dt class="col-sm-3">May-akda</dt>
+        <dd class="col-sm-9">{{ $book['author'] }}</dd>
 
-    <div class="mt-4">
-        <a href="{{ route('books.index') }}" class="btn btn-primary">← Back to Book List</a>
-    </div>
-</div>
+        <dt class="col-sm-3">Taon</dt>
+        <dd class="col-sm-9">{{ $book['year'] }}</dd>
+    </dl>
+
+    <a href="{{ route('books.index') }}" class="btn btn-secondary">← Back to Book List</a>
 @endsection
