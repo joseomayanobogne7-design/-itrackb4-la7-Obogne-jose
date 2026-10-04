@@ -6,23 +6,24 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    private function getSubjectsData()
+    // ✅ PART A: Load data from JSON file
+    private function loadData()
     {
-        return [
-            ['code' => 'ITRACKB4', 'title' => 'Web Systems and Technologies', 'units' => 3, 'course' => 'BSIT'],
-            ['code' => 'ITEC101', 'title' => 'Introduction to Computing', 'units' => 3, 'course' => 'BSIT'],
-            ['code' => 'ITI202', 'title' => 'Database Management Systems', 'units' => 3, 'course' => 'BSIT'],
-            ['code' => 'ITPRO3', 'title' => 'Computer Programming', 'units' => 3, 'course' => 'BSIT'],
-            ['code' => 'ITNET01', 'title' => 'Networking Fundamentals', 'units' => 3, 'course' => 'BSIT'],
-            ['code' => 'GE101', 'title' => 'Understanding the Self', 'units' => 3, 'course' => 'GED'],
-            ['code' => 'ITEL03', 'title' => 'Platform Technologies', 'units' => 3, 'course' => 'BSIT'],
-        ];
+        $path = storage_path('subjects.json');
+        return json_decode(file_get_contents($path), true);
+    }
+
+    // ✅ PART A: Save data to JSON file
+    private function saveData($data)
+    {
+        $path = storage_path('subjects.json');
+        file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT));
     }
 
     public function index(Request $request)
     {
-
-        $subjects = $this->getSubjectsData();
+        // ✅ Read from JSON file instead of hardcoded array
+        $subjects = $this->loadData();
 
         if ($request->query('course')) {
             $subjects = array_filter($subjects, function($subj) use ($request) {
@@ -42,29 +43,65 @@ class SubjectController extends Controller
         return view('subjects.index', compact('subjects', 'fullName'));
     }
 
+    // ✅ PART B: Show the add form
     public function create()
     {
-        
+        return view('subjects.create');
     }
 
-    public function store()
+    // ✅ PART C & E: Receive, validate, save, redirect
+    public function store(Request $request)
     {
+        $validated = $request->validate([
+            'code' => 'required|max:20',
+            'title' => 'required|min:5',
+            'units' => 'required|integer|min:1|max:6',
+            'course' => 'required|in:BSIT,BSIS,BSCS,GED'
+        ]);
+
+        $subjects = $this->loadData();
         
+        // Generate new ID
+        $newId = max(array_column($subjects, 'id')) + 1;
+        
+        // Add new record
+        $subjects[] = [
+            'id' => $newId,
+            'code' => $validated['code'],
+            'title' => $validated['title'],
+            'units' => $validated['units'],
+            'course' => $validated['course']
+        ];
+        
+        $this->saveData($subjects);
+        
+        return redirect()->route('subjects.index')
+                         ->with('success', 'Subject added successfully!');
     }
 
     public function show($id)
     {
-        $subjects = $this->getSubjectsData();
+        // ✅ Read from JSON file
+        $subjects = $this->loadData();
         $id = (int)$id;
 
-        if (!isset($subjects[$id - 1])) {
+        $found = null;
+        foreach ($subjects as $subject) {
+            if ($subject['id'] === $id) {
+                $found = $subject;
+                break;
+            }
+        }
+
+        if (!$found) {
             abort(404);
         }
-        $subject = $subjects[$id - 1];
+        
         $fullName = 'Nadine C. Rojas';
         return view('subjects.show', compact('subject', 'fullName'));
     }
 
+    // ... leave edit, update, destroy, featured as is
     public function edit($id)
     {
     
@@ -82,7 +119,7 @@ class SubjectController extends Controller
 
     public function featured()
     {
-        $subjects = $this->getSubjectsData();
+        $subjects = $this->loadData();
         $subjects = array_slice($subjects, 0, 3);
         $fullName = 'Nadine C. Rojas';
         return view('subjects.featured', compact('subjects', 'fullName'));

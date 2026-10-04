@@ -4,14 +4,16 @@
 
 @section('content')
 
-<div class="mb-4">
-    <a href="{{ route('subjects.index') }}" style="padding: 8px 16px; background: #e9ecef; color: #212529; text-decoration: none; margin-right: 8px; border-radius: 4px;">Subject List</a>
-    <a href="{{ route('subjects.featured') }}" style="padding: 8px 16px; color: #495057; text-decoration: none;">Featured Subjects</a>
+<div class="mb-4" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <a href="{{ route('subjects.index') }}" style="padding: 8px 16px; background: #e9ecef; color: #212529; text-decoration: none; margin-right: 8px; border-radius: 4px;">Subject List</a>
+        <a href="{{ route('subjects.featured') }}" style="padding: 8px 16px; color: #495057; text-decoration: none;">Featured Subjects</a>
+    </div>
+    <a href="{{ route('subjects.create') }}" style="padding: 8px 16px; background: #28a745; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 500;">+ Add New Subject</a>
 </div>
 
 <h5 style="font-weight: bold; margin-bottom: 12px;">My Subject List</h5>
 
-{{-- ✅ Filter Links — naaalala ang search --}}
 <div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
     <div style="margin-bottom: 12px;">
         <strong>Filter by Course:</strong>
@@ -20,7 +22,6 @@
         <a href="{{ route('subjects.index', ['course' => null, 'search' => request('search')]) }}" style="margin: 0 8px; color: #6c757d; text-decoration: none;">Clear Course</a>
     </div>
 
-    {{-- ✅ Search Form — naaalala ang course --}}
     <div>
         <strong>Search:</strong>
         <form action="{{ route('subjects.index') }}" method="GET" style="display: inline;">
@@ -36,7 +37,6 @@
     </div>
 </div>
 
-{{-- ✅ Active Filters Display --}}
 <div style="margin: 15px 0; padding: 10px 15px; background: #e9ecef; border-radius: 4px; font-size: 0.95rem;">
     <strong>Currently showing:</strong>
     @if(request('course'))
@@ -80,7 +80,7 @@
                 @endif
             </td>
             <td style="padding: 10px 14px;">
-                <a href="{{ route('subjects.show', $loop->iteration) }}" style="background: #212529; color: #fff; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem;">View Details</a>
+                <a href="{{ route('subjects.show', $subj['id']) }}" style="background: #212529; color: #fff; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem;">View Details</a>
             </td>
         </tr>
         @php $totalUnits += $subj['units']; @endphp

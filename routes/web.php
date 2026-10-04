@@ -1,21 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BooksController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SubjectController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// ✅ PART A: ONE route for the list page
-Route::get('/books', [BooksController::class, 'index'])->name('books.index');
+// Teachers routes
+Route::get('/teachers/featured', [TeacherController::class, 'featured'])->name('teachers.featured');
+Route::resource('/teachers', TeacherController::class)->only(['index', 'show']);
 
-// ✅ PART C: Redirect old filter URL → new query-string URL
-Route::get('/books/{oldFilter?}', function ($oldFilter = null) {
-    $query = $oldFilter ? ['author' => $oldFilter] : [];
-    return redirect()->route('books.index', $query);
-});
+// Subjects routes
+Route::get('/subjects/featured', [SubjectController::class, 'featured'])->name('subjects.featured');
 
-// Other routes
-Route::get('/books/featured', [BooksController::class, 'featured'])->name('books.featured');
-Route::resource('books', BooksController::class)->except(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+// ✅ LA6 Part C: Redirect old filter route to new query string version
+Route::get('/subjects/filter/{course}', function ($course) {
+    return redirect()->route('subjects.index', ['course' => $course]);
+})->name('subjects.filter');
+
+// ✅ LA7: Added create and store routes
+Route::get('/subjects/create', [SubjectController::class, 'create'])->name('subjects.create');
+Route::post('/subjects', [SubjectController::class, 'store'])->name('subjects.store');
+
+// ✅ Main subjects route — ONE route handles everything!
+Route::resource('/subjects', SubjectController::class)->only(['index', 'show']);

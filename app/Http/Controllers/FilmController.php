@@ -33,7 +33,6 @@ class FilmController extends Controller
     public function featured()
     {
         $movies = $this->getAllMovies();
-       
         $moviesList = array_values($movies);
         return view('movies.show', ['movie' => $moviesList[0]]);
     }
@@ -41,18 +40,40 @@ class FilmController extends Controller
     public function filter($genre = null)
     {
         $movies = $this->getAllMovies();
-
         if ($genre === null || trim($genre) === '') {
             return view('movies.filter', ['movies' => $movies, 'genre' => '']);
         }
-
         $filtered = [];
         foreach ($movies as $movie) {
             if (stripos($movie['genre'], $genre) !== false) {
                 $filtered[] = $movie;
             }
         }
-
         return view('movies.filter', ['movies' => $filtered, 'genre' => $genre]);
+    }
+
+    public function create()
+    {
+        //
+    }
+
+    public function store()
+    {
+        //
+    }
+
+    public function edit()
+    {
+        //
+    }
+
+    public function update($id)
+    {
+        
+    }
+
+    public function destroy($id)
+    {
+        
     }
 }
